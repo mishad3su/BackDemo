@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.*
 class CartController(private val cartService: CartService) {
 
     @PostMapping("/add")
-    fun addToCart(@RequestParam productId: Long, @RequestParam quantity: Int): CartItem {
-        return cartService.addToCart(productId, quantity)
+    fun addToCart(@RequestBody request: AddToCartRequest): CartItemDto {
+        return cartService.addToCart(request)
     }
 
     @DeleteMapping("/remove/{productId}")
@@ -16,7 +16,7 @@ class CartController(private val cartService: CartService) {
         cartService.removeFromCart(productId)
     }
     @GetMapping
-    fun getCart(): List<CartItem> {
+    fun getCart(): List<CartItemDto> {
         return cartService.getCart()
     }
 }
