@@ -10,7 +10,7 @@ class CartService(
 ) {
     fun addToCart(request: AddToCartRequest): CartItemDto {
         val product = productRepository.findById(request.productId)
-            .orElseThrow { ProductNotFoundExceprion ("Товар не найден")}
+            .orElseThrow { ProductNotFoundException ("Товар не найден")}
 
         val cartItem = cartItemRepository.save(
             CartItem(
@@ -30,5 +30,26 @@ class CartService(
     fun getCart(): List<CartItemDto> {
         return cartItemRepository.findAll()
             .map {CartMapper.toDto(it)}
+    }
+
+    fun updateQuantity(productId: Long, newQuantity: Int): CartItemDto {
+        require(newQuantity > 0) { "Количество должно быть положительным" }
+
+        val cartItem = cartItemRepository.findById(productId)
+            .orElseThrow { CartItemNotFoundException ("Товар не найден в корзине") }
+
+        cartItem.quantity = newQuantity
+        cartItemRepository.save(cartItem)
+
+        return CartMapper.toDto(cartItem)
+    }
+
+    fun getCartTotal(): Double {
+        val cartItems = cartItemRepository.findAll()
+        return cartItems.sumOf { item ->
+            val product = productRepository.findById(item.productId)
+                .orElseThrow {ProductNotFoundException ("Товар не найден") }
+            product.price * item.quantity
+        }
     }
 }

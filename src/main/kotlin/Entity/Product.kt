@@ -13,5 +13,5 @@ data class Product(
     val name: String,
 
     @Column(nullable = false)
-    val price: Double
+    var price: Double
 )

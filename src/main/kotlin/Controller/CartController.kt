@@ -19,4 +19,17 @@ class CartController(private val cartService: CartService) {
     fun getCart(): List<CartItemDto> {
         return cartService.getCart()
     }
+
+    @PatchMapping("/update/{productId}")
+     fun updateQuantity(
+         @PathVariable productId: Long,
+         @RequestParam newQuantity: Int
+     ): CartItemDto {
+         return cartService.updateQuantity(productId, newQuantity)
+     }
+
+    @GetMapping
+    fun getTotal(): Map<String, Double> {
+        return mapOf("Всего"  to cartService.getCartTotal())
+    }
 }
