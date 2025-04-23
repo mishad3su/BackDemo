@@ -15,7 +15,7 @@ class CartController(private val cartService: CartService) {
     fun removeFromCart(@PathVariable productId: Long) {
         cartService.removeFromCart(productId)
     }
-    @GetMapping
+    @GetMapping("/items")
     fun getCart(): List<CartItemDto> {
         return cartService.getCart()
     }
@@ -28,7 +28,7 @@ class CartController(private val cartService: CartService) {
          return cartService.updateQuantity(productId, newQuantity)
      }
 
-    @GetMapping
+    @GetMapping("/total")
     fun getTotal(): Map<String, Double> {
         return mapOf("Всего"  to cartService.getCartTotal())
     }
